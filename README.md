@@ -1,23 +1,7 @@
 ## tools
 - [Puppeteer](https://pptr.dev/)
 
-## Template Type 
-- twoSmall
-- threeSmall
-- smallFallback
-- mediumFallback
-- largeFallback
-
-## User Status
-- online
-- offline
-- in-game
-
 ## Selector
-- check child
-  - `#page? > div`  
-- check user in row
-  - `#page_?_row_?_template_? > div`
 - username
   - `#page_?_row_?_template_? > div:nth-child(?) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.apphub_CardTextContent > div `
 - review 
@@ -30,5 +14,6 @@
   - `#page_?_row_?_template_? > div:nth-child(?) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.vote_header > div.reviewInfo > div.thumb > img`
 
 ## Notes
-- div:nth-child(2) 
-  - เลข 2 ระบุ user คนแรก 
+- div:nth-child(2) : เลข 2 ระบุ user คนแรก 
+- สถานะ user : online , offline , in-game
+- template type : twoSmall , threeSmall , smallFallback , mediumFallback ,largeFallback
