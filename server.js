@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer')
+const moment = require('moment')
 
 let templateCaseName = 'twoSmall'
 let userStatus = 'online'
@@ -8,14 +9,14 @@ async function scrap(){
     const browser = await puppeteer.launch(); // open brownser
     const page = await browser.newPage(); // open new tap 
     await page.goto('https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent')
-
+    
     let users = []
-
+    
     // จำนวนแถวทุ้งหมดใน 1 หน้า
     const totolRowPage = await page.$$eval('#page1 > div', el => el.length)
     console.log('page 1 have ',totolRowPage,' rows'); 
-
-
+    
+    
     for(let pageRowIndex = 1 ; pageRowIndex <= totolRowPage ; pageRowIndex++){
         // จำนวน user ในแถว
         const totalUserInRow = await checkTemplate(page,pageRowIndex)
@@ -36,20 +37,22 @@ async function scrap(){
             let dateSL = `#page_1_row_${pageRowIndex}_template_${templateCaseName} > div:nth-child(${userIndex+1}) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.apphub_CardTextContent > div`
             let waitDateSL = await page.waitForSelector(dateSL)
             let date = await page.evaluate(el => el.textContent , waitDateSL)
-            user.date = date
-
+            date = date.replace('โพสต์: ','') + ' 2565'
+            date = moment.parseZone(date,'DD MMMM YYYY','th')
+            user.date = moment(date).add('-543','year').format('L')
+            
             // get review 
             let reviewSL = `#page_1_row_${pageRowIndex}_template_${templateCaseName} > div:nth-child(${userIndex+1}) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.apphub_CardTextContent`
             let waitReviewSL = await page.waitForSelector(reviewSL)
             let review = await page.evaluate(el => el.textContent , waitReviewSL)
             user.review = review
-
+            
             // get avartar 
             let avartarSL = `#page_1_row_${pageRowIndex}_template_${templateCaseName} > div:nth-child(${userIndex+1}) > div.apphub_CardContentAuthorBlock.tall > div.apphub_friend_block_container > div > a > div.appHubIconHolder.${userStatus} > img`
             await page.waitForSelector(avartarSL)
             let avartar = await page.$eval(avartarSL, el => el.getAttribute('src'))
             user.avartar = avartar 
-
+            
             // get vote review
             let voteSL = `#page_1_row_${pageRowIndex}_template_${templateCaseName} > div:nth-child(${userIndex+1}) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.vote_header > div.reviewInfo > div.thumb > img`
             await page.waitForSelector(voteSL)
@@ -62,14 +65,14 @@ async function scrap(){
                 vote = 'cant read value'
             }
             user.vote = vote
-
-            users.push(user)
-
-        }
             
-
+            users.push(user)
+            
+        }
+        
+        
     }
-
+    
     await browser.close() // close 
     console.log(users);
     console.log('end');
@@ -80,7 +83,7 @@ scrap()
 // *** row type
 //  1. #page_?_row_?_template_twoSmall
 //  2. #page_?_row_?_template_threeSmall
-//  3. #page_?_row_?_template_smallFallbac 
+//  3. #page_?_row_?_template_smallFallback
 //  4. #page_?_row_?_template_mediumFallback
 //  5. #page_?_row_?_template_largeFallback
 async function checkTemplate(page,pageRowIndex){
@@ -98,7 +101,7 @@ async function checkTemplate(page,pageRowIndex){
         }else{
             return result
         }
-    // 3. smallFallback
+        // 3. smallFallback
     }).then((result)=>{
         if(result === 0 || result === undefined || result === null ){
             templateCaseName = 'smallFallback'
@@ -139,7 +142,7 @@ async function checkTemplate(page,pageRowIndex){
 //  3. in-game 
 async function checkUserStatus(page,pageRowIndex,userIndex){
     let statusSelectorCheck = `#page_1_row_${pageRowIndex}_template_${templateCaseName} > div:nth-child(${userIndex+1}) > div.apphub_CardContentAuthorBlock.tall > div.apphub_friend_block_container > div > div.apphub_CardContentAuthorName.online.ellipsis > a:nth-child(2)`            
-
+    
     // case 1 
     userStatus = 'online'
     await page.$$eval(statusSelectorCheck , el => el.length)
@@ -163,17 +166,6 @@ async function checkUserStatus(page,pageRowIndex,userIndex){
             return result
         }
     })
-
+    
     return statusSelectorCheck
-}
-
-async function voteSelector (page,pageRowIndex,userIndex){
-    let voteSL = `#page_1_row_${pageRowIndex}_template_${templateCaseName} > div:nth-child(${userIndex+1}) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.vote_header > div.reviewInfo > div.thumb > img`
-    await page.$$eval(voteSL , el => el.length).then((result)=>{
-        if(result === 0){
-            console.log( 'no url !!!!!!');
-        }
-    })
-
-    return voteSL
 }
