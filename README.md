@@ -4,7 +4,7 @@
 ## Template Type 
 - twoSmall
 - threeSmall
-- smallFallbac 
+- smallFallback
 - mediumFallback
 - largeFallback
 
