@@ -1,9 +1,11 @@
 {
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon ./index.js"
+    "dev": "nodemon ./server.js"
   },
   "dependencies": {
     "init": "^0.1.2",
+    "moment": "^2.29.4",
     "puppeteer": "^19.4.1"
   }
 }
