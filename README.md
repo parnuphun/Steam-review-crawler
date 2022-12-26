@@ -40,7 +40,7 @@
 ```
 - vote
 ```ruby
-#page_?_row_?_template_? > div:nth-child(?) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.vote_header > div.reviewInfo > div.thumb > img
+`#page_?_row_?_template_? > div:nth-child(?) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.vote_header > div.reviewInfo > div.thumb > img`
 ```
 ## Notes
 - div:nth-child(2) 
