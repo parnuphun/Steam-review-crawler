@@ -5,44 +5,44 @@ const exportCsv = require('./exportCsvFile')
 let templateCaseName = 'twoSmall'
 let userStatus = 'online'
 let pageIndex = 1
-
-
+let continouse = true
+let userCount = 1
 async function scrap(){
-    const browser = await puppeteer.launch({
-        headless: false,
-    }); // open brownser
-    const page = await browser.newPage(); // open page
+    // open 
+    const browser = await puppeteer.launch({ 
+        // headless: false,
+        // timeout: 10000
+    });
+    const page = await browser.newPage(); 
     await page.goto('https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent')
     
-    // await autoSrollPage(page)
+    // check button cover page
+    await btnGate(page)
+
     let users = []
-    
-    while(true){
+    while(continouse){
         // จำนวนแถวทุ้งหมดใน 1 หน้า
         const totolRowPage = await getTotalRowInPage(page)
-        console.log('page '+pageIndex+' have ',totolRowPage,' rows'); 
+        // console.log('page '+pageIndex+' have ',totolRowPage,' rows'); 
         // await autoSrollPage(page)
         
         for(let pageRowIndex = 1 ; pageRowIndex <= totolRowPage ; pageRowIndex++){
             // จำนวน user ในแถว
             const totalUserInRow = await checkTemplate(page,pageRowIndex)
-            console.log('page '+pageIndex + ' row ', pageRowIndex ,' have ', totalUserInRow ,' user');
+            // console.log('page '+pageIndex + ' row ', pageRowIndex ,' have ', totalUserInRow ,' user');
             
             for(let userIndex = 1; userIndex <= totalUserInRow; userIndex++){
                 // console.log('user คนที่ ', userIndex);
                 let user = {}
-                
-                // get username 
-                let statusSelectorCheck = await checkUserStatus(page,pageRowIndex,userIndex)
-                let waiteStatusSL = await page.waitForSelector(statusSelectorCheck)
-                let username = await page.evaluate(el => el.textContent , waiteStatusSL)
-                user.username = username
-                
-                
+
                 // get date
                 let dateSL = `#page_${pageIndex}_row_${pageRowIndex}_template_${templateCaseName} > div:nth-child(${userIndex+1}) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.apphub_CardTextContent > div`
                 let waitDateSL = await page.waitForSelector(dateSL)
                 let date = await page.evaluate(el => el.textContent , waitDateSL)
+                if(date.includes('2021')){
+                    continouse = false 
+                    break ;
+                }
                 if(date.includes('ธันวาคม')){
                     date = date.replace('โพสต์: ','') + ' 2565'
                     date = moment.parseZone(date,'DD MMMM YYYY','th')
@@ -52,6 +52,12 @@ async function scrap(){
                     date = moment.parseZone(date,'DD MMMM YYYY','en')
                     user.date = moment(date).format('L')
                 }
+
+                // get username 
+                let statusSelectorCheck = await checkUserStatus(page,pageRowIndex,userIndex)
+                let waiteStatusSL = await page.waitForSelector(statusSelectorCheck)
+                let username = await page.evaluate(el => el.textContent , waiteStatusSL)
+                user.username = username
                 
                 // get review 
                 let reviewSL = `#page_${pageIndex}_row_${pageRowIndex}_template_${templateCaseName} > div:nth-child(${userIndex+1}) > div.apphub_CardContentMain > div.apphub_UserReviewCardContent > div.apphub_CardTextContent`
@@ -79,14 +85,15 @@ async function scrap(){
                 user.vote = vote
                 
                 users.push(user)
-
+                console.log(`page: ${pageIndex} row: ${pageRowIndex} user: ${userCount} ${username} success !!`);
+                userCount++
             }
             
         }
         
-        if(pageIndex === 10){
-            break;
-        }
+        // if(pageIndex === 10){
+        //     break;
+        // }
         previousHeight = await page.evaluate('document.body.scrollHeight');
         await page.evaluate(`window.scrollTo(0, document.body.scrollHeight)`);  
         await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}` )
@@ -192,7 +199,17 @@ async function checkUserStatus(page,pageRowIndex,userIndex){
 
 // get total row per page
 async function getTotalRowInPage(page){
-   return page.$$eval(`#page${pageIndex} > div`, el => el.length)
+    return page.$$eval(`#page${pageIndex} > div`, el => el.length)
 }
 
+async function btnGate(page){
+    return page.$$eval(`#age_gate_btn_continue` , el => el.length).then(async (result)=>{
+        if(result === 0){
+            continouse = false
+        }else {
+            const btnGate = await page.$('#age_gate_btn_continue')
+            await btnGate.evaluate( btnGate => btnGate.click())
+        }
+    })
+}
 module.exports = scrap
