@@ -6,7 +6,9 @@
 - div:nth-child(2)
   - เลข 2 ระบุ user คนแรก 
 - สถานะ user
-  - online , offline , in-game
+  - online
+  - offline
+  - in-game
 - template type
   - twoSmall
   - threeSmall
