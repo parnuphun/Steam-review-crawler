@@ -1,6 +1,9 @@
 ## important
-- div:nth-child(2) : เลข 2 ระบุ user คนแรก 
-- Template Type 
+```ruby
+div:nth-child(2) : เลข 2 ระบุ user คนแรก 
+```
+
+#### Template Type 
 | Template Name |
 |---------------|
 |twoSmall|
@@ -9,7 +12,7 @@
 |mediumFallback|
 |largeFallback|
 
-- User Status
+#### User Status
 | Status Name |
 |-------------|
 |online|
