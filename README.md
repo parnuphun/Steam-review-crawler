@@ -1,23 +1,14 @@
-## important
-```ruby
-div:nth-child(2) : เลข 2 ระบุ user คนแรก 
-```
+## Important
+- div:nth-child(2) : เลข 2 ระบุ user คนแรก 
 
-#### Template Type 
-| Template Name |
-|---------------|
-|twoSmall|
-|threeSmall|
-|smallFallback|
-|mediumFallback|
-|largeFallback|
-
-#### User Status
-| Status Name |
-|-------------|
-|online|
-|offline|
-|in-game|
+#### Template Type And User Status
+| Template Name | Status Name |
+|---------------| -------------|
+|twoSmall| online|
+|threeSmall| offline|
+|smallFallback| in-game|
+|mediumFallback| |
+|largeFallback| |
 
 ## Notes
 - [Infinite Scroll](https://www.youtube.com/watch?v=nDBdvqRWvCw&t=287s)
