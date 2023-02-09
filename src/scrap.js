@@ -7,17 +7,20 @@ let userStatus = 'online'
 let pageIndex = 1
 let continouse = true
 let userCount = 1
-async function scrap(){
+
+async function scrap(steamUrl){
     // open 
     const browser = await puppeteer.launch({ 
-        // headless: false,
-        // timeout: 10000
+        headless: false,
+        timeout: 10000
     });
     const page = await browser.newPage(); 
-    await page.goto('https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent')
+    // await page.goto('https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent')
+    await page.goto(steamUrl)
+
     
     // check button cover page
-    await btnGate(page)
+    // await btnGate(page)
 
     let users = []
     while(continouse){
@@ -88,23 +91,30 @@ async function scrap(){
                 console.log(`page: ${pageIndex} row: ${pageRowIndex} user: ${userCount} ${username} success !!`);
                 userCount++
             }
-            
         }
-        
         // if(pageIndex === 10){
         //     break;
         // }
-        previousHeight = await page.evaluate('document.body.scrollHeight');
-        await page.evaluate(`window.scrollTo(0, document.body.scrollHeight)`);  
-        await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}` )
+        previousHeight = await page.evaluate('document.body.scrollHeight')
+        try {
+            await page.evaluate(`window.scrollTo(0, document.body.scrollHeight)`,{ timeout: 5000 });
+        } catch (error) {
+            break ;
+        }
+        try {
+            await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}`,{ timeout: 5000 })
+        } catch (error) {
+            break ;
+        }
         pageIndex ++
-         
+        
     }
     await browser.close() // close 
-    console.log(users);
-    console.log(users.length);
-    await exportCsv(users)
+    // console.log(users);
+    console.log('Total Reviews : ',users.length);
+    // await exportCsv(users)
     console.log('end');
+    return users
 }
 
 // *** row type
@@ -212,4 +222,5 @@ async function btnGate(page){
         }
     })
 }
+
 module.exports = scrap
