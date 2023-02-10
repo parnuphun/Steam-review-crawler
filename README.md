@@ -14,6 +14,7 @@ This project was done to study how to use puppeteer to scrape the data I need.
 <p align="center">
   <img src="https://github.com/parnuphun/Give-me-i-want-it/blob/master/SteamReviewScrapeDemo.gif" width=70%>
 </p>
+
 - Example Link : https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent
 
 - Problem
