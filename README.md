@@ -1,3 +1,17 @@
-## URL Example ... 
+## Web Scraping
+This project was done to study how to use puppeteer to scrape the data I need.
+
+- Start Project
+```ruby
+  npm run dev 
+```
+- build tailwind css
+```ruby
+  npm run build
+```
+## Steam Review
 - Steam Review : [Link Example](https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent) 
 
+- Problem
+  - When headless is false and while scraping and you close your browser you will get an error.
+  - When you export a csv file, the review field is not displayed and languages other than English are rendered incorrectly.
