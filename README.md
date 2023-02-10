@@ -1,6 +1,10 @@
 # WebScraper
 This project was done to study how to use puppeteer to scrape the data I need.
 
+- install dependencies 
+```ruby
+  npm i
+```
 - start Project
 ```ruby
   npm run dev 
