@@ -28,19 +28,28 @@
 }
 
 .indexField {
-    @apply w-10 max-w-min text-center ;
-}
-
-.imageField {
-    @apply w-10 p-2 max-w-min ; 
-}
-
-.nameField {
-    @apply w-60 text-left truncate ;
+    @apply w-8 min-w-max text-center ;
 }
 
 .imageBox {
     @apply rounded-full w-10 h-10 max-w-min object-cover ;
+}
+
+.imageField {
+    @apply w-10 max-w-min px-2 ; 
+}
+
+.nameField {
+    @apply w-32 px-2 text-left truncate ;
+}
+
+.voteField {
+    @apply w-20 px-2 text-center ;
+}
+
+
+.dateField {
+    @apply w-40 px-2 text-center ;
 }
 
 .rowHover {

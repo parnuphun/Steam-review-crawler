@@ -13,9 +13,10 @@ async function exportCsv(data){
         ]
     });
     
-    csvWriter.writeRecords(data)       // returns a promise
+    return csvWriter.writeRecords(data)       // returns a promise
     .then(() => {
         console.log('The CSV file was written successfully');
+        return newFileName
     });
 }
 

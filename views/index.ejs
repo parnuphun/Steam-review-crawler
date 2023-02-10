@@ -12,14 +12,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
 
-
+    <!-- sw -->
+    
     <title>Scraping Projects</title>
-
+    
     <style>
         body {
             font-family: 'Itim', cursive;
         }
     </style>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
  
 <body>
@@ -40,44 +42,43 @@
         </a>
     </div>
 
-
     <div class="w-full flex flex-col justify-start p-2">
         <div class="w-full flex flex-row justify-start items-center gap-2">            
             <div class="w-full">
-                <input id="steamUrl" type="text" class="w-full f-input" placeholder="กรอก URL ตรงนี้ๆ"
-                    value="https://steamcommunity.com/app/349040/reviews/?filterLanguage=thai&p=1&browsefilter=trendmonth"
+                <input id="steamUrl" type="text" class="w-full f-input" placeholder="Enter Steam Review URL"
+                    value="https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent"
                 >
             </div>
             <div class="">
-                <input id="limit" type="number" class="w-full f-input" placeholder="จำกัดจำนวนรีวิว" step="10" >
+                <input id="limit" type="number" class="w-full f-input" placeholder="Limit" step="10" value="20" min="0" max="1000">
             </div>
             <div class="w-max">
                 <div class="f-btn-primary" onclick="sendUrl()">
-                    เริ่มดูด !!
+                    Start
                 </div>
             </div>
             <div class="w-max">
+                <div class="f-btn-success" onclick="exportCsv()">
+                    Export .csv
+                </div>
+            </div>
+            <!-- <div class="w-max">
                 <div class="f-btn-success">
-                    อยากได้ .csv อะ
+                    Simulator
                 </div>
-            </div>
-            <div class="w-max">
-                <div class="f-btn bg-yellow-500 hover:bg-yellow-700">
-                    ไหนกราฟ
-                </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="w-full">
             <table class="w-full mt-4">
                 <thead class="text-lg rounded-3xl border-2 rounded-tr-lg rounded-tl-lg">
                     <tr class="py-3">
-                        <th>#</th>
-                        <th>รูป</th>
-                        <th class="text-left">ชื่อ</th>
-                        <th>ข้อความ</th>
-                        <th>โหวต</th>
-                        <th class="px-2">วันที่</th>
+                        <th class="indexField">#</th>
+                        <th class="imageField"></th>
+                        <th class="nameField">Username</th>
+                        <th class="text-left px-2">Review</th>
+                        <th class="voteField">Vote</th>
+                        <th class="dateField">Date</th>
                     </tr>
                 </thead>
                 <tbody id="tbodyLoop" class="border-2">
@@ -88,79 +89,160 @@
 </body>
 
 <script>
-
+    
+    let isloading = false 
+    let openChromium = false 
+    let reviewData = [] 
 
     async function sendUrl(){
         let url = document.getElementById('steamUrl')
-
-        await fetch("http://127.0.0.1:4020/api/startScrapingSteamReview", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(
-                    {
-                        url: url.value
+        let limit = document.getElementById('limit')
+        if(!(url.value.startsWith('https://steamcommunity.com/app/') && url.value.includes('/reviews/'))){
+            swal.fire({
+                title: 'Invalid URL' ,
+                text: 'URL shold start at "https://steamcommunity.com/app/" and Include "/reviews/" ',
+                icon:'error',
+                showConfirmButton: false ,
+                timer: 7000 ,
+                timerProgressBar:true ,
+            })
+ 
+        }else{
+            Swal.fire({
+                title: 'Scraping...',
+                html: `It may take a long time if you don't set the desired limit or it may not finish at all...`,
+                allowOutsideClick: false ,
+                didOpen: () => {
+                    Swal.showLoading()
+                },
+            })
+            await fetch("http://127.0.0.1:4020/api/startScrapingSteamReview", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(
+                        {
+                            url: url.value ,
+                            limit : limit.value
+                        }
+                    )
+            }).then(async (res)=>{
+                swal.close()
+                const data = await res.json()
+                reviewData = data
+                console.log(data);
+                Swal.mixin({
+                    toast: true ,
+                    position: 'bottom-end',
+                    timer: 5000 ,
+                    timerProgressBar: true ,
+                    showCancelButton: false ,
+                    showConfirmButton: false ,
+                    background : '#22c55e' ,
+                    showCloseButton: true,
+                    iconColor: 'white',
+                    color:'white',
+                    width: 'auto',
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
                     }
-                )
-        }).then(async (res)=>{
-            const data = await res.json();
-            console.log(data);
-            const tbody = document.querySelector("#tbodyLoop");
-            // let row = document.getElementById('rowData')
-            for (let i = 0; i < data.length; i++) {
-                // row
-                let row = document.createElement("tr");
-                row.classList.add('rowHover')
-                row.id = "rowData" + i;
+                }).fire({
+                    title: 'Success !!!' ,
+                    text: `Total reviews ${data.length} `,
+                    icon: 'success' ,
+                })
 
-                    // index 
-                    let indexField = document.createElement('td');
-                    indexField.textContent = i+1;
-                    indexField.classList.add('indexField')
-                    row.appendChild(indexField);
+                const tbody = document.querySelector("#tbodyLoop");
+        
+                //e.firstElementChild can be used. 
+                let child = tbody.lastElementChild;  
+                while (child) { 
+                    tbody.removeChild(child); 
+                    child = tbody.lastElementChild; 
+                } 
 
+                for (let i = 0; i < data.length; i++) {
+                    // row
+                    let row = document.createElement("tr");
+                    row.classList.add('rowHover')
+                    row.id = "rowData" + i;
 
-                    // imageField
-                    let imageField = document.createElement('td');
-                        let imageBox = document.createElement('img')
-                        imageBox.classList.add('imageBox')
-                        imageBox.src = data[i].avartar;
-                    imageField.appendChild(imageBox)
-                    imageField.classList.add('imageField')
-                    row.appendChild(imageField);
+                        // index 
+                        let indexField = document.createElement('td');
+                        indexField.textContent = i+1;
+                        indexField.classList.add('indexField')
+                        row.appendChild(indexField);
+                        // imageField
+                        let imageField = document.createElement('td');
+                            let imageBox = document.createElement('img')
+                            imageBox.classList.add('imageBox')
+                            imageBox.src = data[i].avartar;
+                        imageField.classList.add('imageField')
+                        imageField.appendChild(imageBox)
+                        row.appendChild(imageField);
+                        // nameField 
+                        let nameField = document.createElement('td')
+                        nameField.textContent = data[i].username 
+                        nameField.classList.add('nameField')
+                        row.appendChild(nameField);
+                        // reviewField
+                        let reviewsTextField = document.createElement('td')
+                        reviewsTextField.textContent = data[i].review
+                        reviewsTextField.classList.add('px-2')
+                        row.appendChild(reviewsTextField);
+                        //voteField
+                        let voteField = document.createElement('td')
+                        if(data[i].vote === '+'){
+                            voteField.textContent = "Positive"
+                            voteField.classList.add('text-green-500')
+                        }else{
+                            voteField.textContent = "Nagative"
+                            voteField.classList.add('text-red-500')
+                        }
+                        voteField.classList.add('font-bold')
+                        voteField.classList.add('voteField')
+                        row.appendChild(voteField)
+                        // dateField
+                        let dateField = document.createElement('td')
+                        dateField.textContent = data[i].date
+                        dateField.classList.add('dateField')
+                        row.appendChild(dateField) 
 
-                    // nameField 
-                    let nameField = document.createElement('td')
-                    nameField.textContent = data[i].username 
-                    nameField.classList.add('nameField')
-                    row.appendChild(nameField);
+                    tbody.appendChild(row);
+                }
+            })
+            console.log('true');
 
-                    // reviewField
-                    let reviewsTextField = document.createElement('td')
-                    reviewsTextField.textContent = data[i].review
-                    row.appendChild(reviewsTextField);
-
-                    //voteField
-                    let voteField = document.createElement('td')
-                    if(data[i].vote === '+'){
-                        voteField.textContent = "บวก"
-                        voteField.classList.add('text-green-500')
-                    }else{
-                        voteField.textContent = "ลบ"
-                        voteField.classList.add('text-red-500')
-                    }
-                    voteField.classList.add('font-bold')
-                    voteField.classList.add('indexField')
-                    row.appendChild(voteField)
-
-                    // dateField
-                    let dateField = document.createElement('td')
-                    dateField.textContent = data[i].date
-                    row.appendChild(dateField) 
-
-                tbody.appendChild(row);
-            }
-        })
+        }
     }
 
+    async function exportCsv(){
+        if(reviewData.length <= 0){
+            swal.fire({
+                title: 'No data !!',
+                text: 'You shold scraping review first and then you will can export csv .',
+                icon: 'warning',
+                showConfirmButton: false ,
+                timer: 7000 ,
+                timerProgressBar:true 
+            })
+        }else{
+            await fetch("http://127.0.0.1:4020/api/exportSteamReviewToCSV", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(
+                        {
+                            data: reviewData
+                        }
+                    )
+            }).then(async(res)=>{
+                const blob = await res.blob();
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'data.csv';
+                link.click();
+            })
+        }
+    }
 </script>
 </html>

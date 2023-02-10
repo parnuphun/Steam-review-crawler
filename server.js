@@ -1,5 +1,6 @@
-const scrap = require('./src/scrap')
 const express = require('express')
+const exportCsv = require('./src/exportCsvFile')
+const scrap = require('./src/scrap')
 const cors = require('cors')
 const path = require('path')
 const app = express()
@@ -19,9 +20,18 @@ app.get('/',(req, res)=>{
 
 app.post('/api/startScrapingSteamReview',async (req,res)=>{
     let url = req.body.url
-    let data = await scrap(url)
-    // res.render('index', { reviewsData: data });
+    let limit = req.body.limit
+    let data = await scrap(url , limit)
     res.json(data);
+})
+
+app.post('/api/exportSteamReviewToCSV', async (req,res)=>{
+    console.log('I n');
+    let data = req.body.data
+    let csvName = await exportCsv(data)
+    
+    const file = path.join(__dirname, 'public/csv/'+csvName);
+    res.download(file)
 })
 
 app.listen(port || 3030 , ()=>{ 
