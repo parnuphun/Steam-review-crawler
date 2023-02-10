@@ -10,7 +10,8 @@ This project was done to study how to use puppeteer to scrape the data I need.
   npm run build
 ```
 ## Steam Review
-![image](https://github.com/parnuphun/Give-me-i-want-it/blob/master/SteamReviewScrapeDemo.gif | width=80) 
+<img src="[https://i.imgur.com/ZWnhY9T.png](https://github.com/parnuphun/Give-me-i-want-it/blob/master/SteamReviewScrapeDemo.gif)" width=50% height=50%>
+
 - Steam Review : [Link Example](https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent) 
 - Problem
   - When headless is false and while scraping and you close your browser you will get an error.
