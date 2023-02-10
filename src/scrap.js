@@ -97,12 +97,12 @@ async function scrap(steamUrl){
         // }
         previousHeight = await page.evaluate('document.body.scrollHeight')
         try {
-            await page.evaluate(`window.scrollTo(0, document.body.scrollHeight)`,{ timeout: 5000 });
+            await page.evaluate(`window.scrollTo(0, document.body.scrollHeight)`,{ timeout: 3000 });
         } catch (error) {
             break ;
         }
         try {
-            await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}`,{ timeout: 5000 })
+            await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}`,{ timeout: 1000 })
         } catch (error) {
             break ;
         }
