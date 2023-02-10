@@ -1,7 +1,7 @@
-## Web Scraping
+# WebScraper
 This project was done to study how to use puppeteer to scrape the data I need.
 
-- Start Project
+- start Project
 ```ruby
   npm run dev 
 ```
@@ -9,6 +9,7 @@ This project was done to study how to use puppeteer to scrape the data I need.
 ```ruby
   npm run build
 ```
+
 ## Steam Review
 <p align="center">
   <img src="https://github.com/parnuphun/Give-me-i-want-it/blob/master/SteamReviewScrapeDemo.gif" width=70%>
