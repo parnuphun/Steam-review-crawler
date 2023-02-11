@@ -1,5 +1,5 @@
 ## :page_facing_up: WebScraper
-This project was done to study how to use puppeteer to scrape the data I need.
+This project was done to study how to use puppeteer to scrape the data I need. If you read and don't understand, yes I use Google Translate :trollface: .
 
 - install dependencies 
 ```ruby
