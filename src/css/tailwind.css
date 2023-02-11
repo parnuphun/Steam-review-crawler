@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 .f-btn{
-    @apply py-2 px-3 min-w-max text-center text-base text-white rounded-lg cursor-pointer hover:drop-shadow-xl duration-300    ;
+    @apply py-2 px-3 min-w-max text-center text-base text-white rounded-lg cursor-pointer hover:drop-shadow-xl duration-300 ;
 }
 .f-btn-lg {
-    @apply w-28 py-2 px-3 min-w-max text-center text-lg text-white rounded-lg cursor-pointer hover:drop-shadow-xl duration-300    ;
+    @apply w-28 py-2 px-3 min-w-max text-center text-lg text-white rounded-lg cursor-pointer hover:drop-shadow-xl duration-300 ;
 }
 
 .f-btn-primary{
