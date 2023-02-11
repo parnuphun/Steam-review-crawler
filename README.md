@@ -1,7 +1,11 @@
-## Web Scraping
+# WebScraper
 This project was done to study how to use puppeteer to scrape the data I need.
 
-- Start Project
+- install dependencies 
+```ruby
+  npm i
+```
+- start Project
 ```ruby
   npm run dev 
 ```
@@ -9,9 +13,14 @@ This project was done to study how to use puppeteer to scrape the data I need.
 ```ruby
   npm run build
 ```
-## Steam Review
-- Steam Review : [Link Example](https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent) 
 
-- Problem
-  - When headless is false and while scraping and you close your browser you will get an error.
+## Steam Review
+<p align="center">
+  <img src="https://github.com/parnuphun/Give-me-i-want-it/blob/master/SteamReviewScrapeDemo.gif" width=70%>
+</p>
+
+- :link: [Example Link](https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent)
+
+- :warning: Problem
+  - When headless is false when scraping data, Chromium browser will be opened to simulate And while you are in the process of scraping that data and you close the browser it will cause an error and sometimes it won't.
   - When you export a csv file, the review field is not displayed and languages other than English are rendered incorrectly.
