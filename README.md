@@ -1,6 +1,10 @@
 ## :page_facing_up: WebScraper
 This project was done to study how to use puppeteer to scrape the data I need. If you read and don't understand, yes I use Google Translate :trollface: .
 
+## :package: Dependencies
+- puppeteer
+- csv-writer
+
 ## :wrench: Configuration 
 - install dependencies 
 ```ruby
@@ -22,3 +26,8 @@ This project was done to study how to use puppeteer to scrape the data I need. I
 - Problem
   - When you set headless to "false", puppeteer will open a simulated browser and while you are scraping data, Did you close your browser due to unexpected events? may cause an error which occurs very often But sometimes it doesn't happen.
   - When you export a csv file, the review field is not displayed and languages other than English are rendered incorrectly.
+
+## :pencil: Notes
+- `div:nth-child(2)` The number 2 means the first item.
+- Template Type `twoSmall` , `threeSmall` , `smallFallback` , `mediumFallback`  and `largeFallback` 
+- User Type `online` , `offline` and `in-game` 
