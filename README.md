@@ -3,9 +3,9 @@ This project was done to study how to use puppeteer to scrape the data I need. I
 
 - install dependencies 
 ```ruby
-  npm i
+  npm install
 ```
-- start Project
+- start Project (you need to install additional nodemon in case your computer doesn't install nodemon globally on your computer.)
 ```ruby
   npm run dev 
 ```
