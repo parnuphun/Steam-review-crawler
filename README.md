@@ -6,6 +6,7 @@ This project was done to study how to use puppeteer to scrape the data I need. I
 - [csv-writer](https://github.com/ryu1kn/csv-writer)
 
 ## :wrench: Configuration 
+- ⚠️ Once npm install, if you have nodemon installed globally, you can npm run dev if not npm i nodemon in project first or globally.
 - install dependencies 
 ```ruby
   npm install
