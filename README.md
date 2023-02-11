@@ -1,4 +1,4 @@
-# WebScraper
+# :page_facing_up: WebScraper
 This project was done to study how to use puppeteer to scrape the data I need.
 
 - install dependencies 
@@ -14,11 +14,7 @@ This project was done to study how to use puppeteer to scrape the data I need.
   npm run build
 ```
 
-## Steam Review
-<p align="center">
-  <img src="https://github.com/parnuphun/Give-me-i-want-it/blob/master/SteamReviewScrapeDemo.gif" width=70%>
-</p>
-
+## :speech_balloon: Steam Review
 - :link: [Example Link](https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent)
 
 - :warning: Problem
