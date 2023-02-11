@@ -2,8 +2,8 @@
 This project was done to study how to use puppeteer to scrape the data I need. If you read and don't understand, yes I use Google Translate :trollface: .
 
 ## :package: Dependencies
-- puppeteer
-- csv-writer
+- [puppeteer](https://pptr.dev/)
+- [csv-writer](https://github.com/ryu1kn/csv-writer)
 
 ## :wrench: Configuration 
 - install dependencies 
