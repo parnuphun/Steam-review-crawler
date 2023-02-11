@@ -21,12 +21,13 @@ app.get('/',(req, res)=>{
 app.post('/api/startScrapingSteamReview',async (req,res)=>{
     let url = req.body.url
     let limit = req.body.limit
-    let data = await scrap(url , limit)
+    let sim = req.body.sim
+    let data = await scrap(url , limit , sim)
+
     res.json(data);
 })
 
 app.post('/api/exportSteamReviewToCSV', async (req,res)=>{
-    console.log('I n');
     let data = req.body.data
     let csvName = await exportCsv(data)
     

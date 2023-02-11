@@ -1,4 +1,9 @@
 const puppeteer = require('puppeteer')
+const WebSocket = require("ws")
+
+const server = new WebSocket.Server({ port: 4021 })
+server.setMaxListeners(200)
+
 
 // default values
 let templateCaseName = 'twoSmall' // template Type 
@@ -8,10 +13,10 @@ let continouse = true // Start Loop
 let userCount = 1 // User Count 
 let maxData = 1000 // max data scrap 
 
-async function scrap(steamUrl , limit){
+async function scrap(steamUrl , limit , sim){
 
     const browser = await puppeteer.launch({ // Start Bronser
-        headless: true, // open chromium
+        headless: !sim, // open chromium
         timeout: 10000
     });
     const page = await browser.newPage(); // Create Page
@@ -23,7 +28,6 @@ async function scrap(steamUrl , limit){
 
     let users = [] 
     while(continouse){
-        console.log(continouse);
         const totolRowPage = await getTotalRowInPage(page) // จำนวนแถวทุ้งหมดใน 1 หน้า
         for(let pageRowIndex = 1 ; pageRowIndex <= totolRowPage ; pageRowIndex++){
             const totalUserInRow = await checkTemplate(page,pageRowIndex)  // จำนวน user ในแถว
@@ -35,8 +39,9 @@ async function scrap(steamUrl , limit){
                     let waitDateSL = await page.waitForSelector(dateSL)
                     let date = await page.evaluate(el => el.textContent , waitDateSL)
                     if(date.includes('Posted: ') || date.includes('โพสต์: ')){
-                        if(date.includes('Posted: '))   date = date.replace('Posted: ','') + ' ' + new Date().getFullYear()
-                        else                            date = date.replace('โพสต์: ','') + ' ' + new Date().getFullYear()
+                        if(date.includes('Posted: '))   date = date.replace('Posted: ','') 
+                        else                            date = date.replace('โพสต์: ','')  
+                        // user.date = date + ' ' + new Date().getFullYear()
                         user.date = date
                     }
                     // get username 
@@ -67,6 +72,21 @@ async function scrap(steamUrl , limit){
                     users.push(user) //push userObj to usersArr
                     console.log(`page: ${pageIndex} row: ${pageRowIndex} user: ${userCount} ${username} success !!`); //review scraped log
                     userCount++ //user scaped count for checking limit
+
+                    // server.on('connection', function(socket) {
+                    //     console.log('Client connected');
+                      
+                    //     // Add an event listener for incoming messages
+                    //     socket.on('message', function(message) {
+                    //       console.log('Received message: ', message);
+                    //     });
+                      
+                    //     setInterval(function() {
+                    //       userCount++;
+                    //       socket.send(userCount.toString());
+                    //     }, 1000);
+                    // });
+
                 }catch(err){
                     console.log('err loop in');
                     continouse = false
