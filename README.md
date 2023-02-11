@@ -28,6 +28,6 @@ This project was done to study how to use puppeteer to scrape the data I need. I
   - When you export a csv file, the review field is not displayed and languages other than English are rendered incorrectly.
 
 ## :pencil: Notes
-- `div:nth-child(2)` The number 2 means the first item.
-- Template Type `twoSmall` , `threeSmall` , `smallFallback` , `mediumFallback`  and `largeFallback` 
-- User Type `online` , `offline` and `in-game` 
+- `div:nth-child(2)` The number 2 means the first item started.
+- Template Type `twoSmall` , `threeSmall` , `smallFallback` , `mediumFallback`  and `largeFallback`.
+- User Type `online` , `offline` and `in-game`.
