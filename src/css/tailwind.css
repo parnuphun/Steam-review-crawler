@@ -36,11 +36,11 @@
 }
 
 .imageField {
-    @apply w-10 max-w-min px-2 ; 
+    @apply w-10 max-w-min min-w-max; 
 }
 
 .nameField {
-    @apply w-32 px-2 text-left truncate ;
+    @apply w-40 px-4 text-left truncate ;
 }
 
 .voteField {
@@ -54,4 +54,8 @@
 
 .rowHover {
     @apply cursor-pointer hover:bg-gray-200 transition transform hover:-translate-y-1 ;
+}
+
+.tag {
+ 
 }

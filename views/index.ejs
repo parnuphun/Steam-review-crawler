@@ -12,8 +12,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
 
-    <!-- sw -->
+    <!-- sweet alert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- flowbit -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" /> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
+
+
     <title>Scraping Projects</title>
     
     <style>
@@ -21,14 +27,12 @@
             font-family: 'Itim', cursive;
         }
     </style>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
  
-<body>
+<body class="overflow-x-hidden">
     <div class="w-screen bg-gray-900 snap-x flex py-5 px-5 gap-5 overflow-x-auto justify-center">
         <!--  -->
-        <a href="https://steamcommunity.com/app/349040/reviews/?filterLanguage=thai&p=1&browsefilter=trendmonth" target="_blank"
-            class="w-96 h-24 scroll-ml-6 flex-shrink-0 snap-start rounded-lg bg-gray-50 transition transform hover:-translate-y-1 cursor-pointer duration-300">
+        <a href="#" class="w-96 h-24 scroll-ml-6 flex-shrink-0 snap-start rounded-lg bg-gray-50 transition transform hover:-translate-y-1 cursor-pointer duration-300">
             <div class="w-full h-full flex">
                 <div class="pl-3 w-28 h-ful rounded-lg flex justify-center items-center">
                     <img src="logo/steam_logo.png" class="object-fit" alt="">
@@ -45,12 +49,21 @@
     <div class="w-full flex flex-col justify-start p-2">
         <div class="w-full flex flex-row justify-start items-center gap-2">            
             <div class="w-full">
-                <input id="steamUrl" type="text" class="w-full f-input" placeholder="Enter Steam Review URL"
-                    value="https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent"
+                <input id="steamUrl" type="text" class="w-full f-input min-w-[300px]" 
+                    placeholder="Enter Steam Review URL : https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent"
+                    value=""
                 >
             </div>
-            <div class="">
-                <input id="limit" type="number" class="w-full f-input" placeholder="Limit" step="10" value="20" min="0" max="1000">
+            <div class=""> 
+                <input id="limit" data-tooltip-target="tooltip-limit"  data-tooltip-placement="top"
+                        type="number" class="w-full f-input min-w-[80px]" placeholder="Limit" step="10" value="20" min="0" max="1000" >
+                <div id="tooltip-limit" role="tooltip" 
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium 
+                            text-white transition-opacity duration-300 bg-gray-900 rounded-lg 
+                            shadow-sm opacity-0 tooltip border-2 border-white">
+                    Limit
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
             </div>
             <div class="w-max">
                 <div class="f-btn-primary" onclick="sendUrl()">
@@ -62,6 +75,12 @@
                     Export .csv
                 </div>
             </div>
+            <a class="w-max" href="https://steamcommunity.com/app/349040/reviews/?filterLanguage=thai&p=1&browsefilter=trendmonth" target="_blank">
+                <div
+                    class="f-btn bg-yellow-500 hover:bg-yellow-700">
+                    Example Link
+                </div>
+            </a>
             <!-- <div class="w-max">
                 <div class="f-btn-success">
                     Simulator
@@ -70,13 +89,13 @@
         </div>
 
         <div class="w-full">
-            <table class="w-full mt-4">
+            <table class="w-full mt-4 table-fixed ">
                 <thead class="text-lg rounded-3xl border-2 rounded-tr-lg rounded-tl-lg">
                     <tr class="py-3">
                         <th class="indexField">#</th>
                         <th class="imageField"></th>
                         <th class="nameField">Username</th>
-                        <th class="text-left px-2">Review</th>
+                        <th class="text-left px-2 ">Review</th>
                         <th class="voteField">Vote</th>
                         <th class="dateField">Date</th>
                     </tr>
@@ -93,11 +112,14 @@
     let isloading = false 
     let openChromium = false 
     let reviewData = [] 
+    let items = 0
+    let interval 
 
     async function sendUrl(){
         let url = document.getElementById('steamUrl')
         let limit = document.getElementById('limit')
         if(!(url.value.startsWith('https://steamcommunity.com/app/') && url.value.includes('/reviews/'))){
+            // error url message 
             swal.fire({
                 title: 'Invalid URL' ,
                 text: 'URL shold start at "https://steamcommunity.com/app/" and Include "/reviews/" ',
@@ -109,13 +131,23 @@
  
         }else{
             Swal.fire({
-                title: 'Scraping...',
+                title: `Scraping ...`,
                 html: `It may take a long time if you don't set the desired limit or it may not finish at all...`,
                 allowOutsideClick: false ,
+                showConfirmButton: false ,
                 didOpen: () => {
                     Swal.showLoading()
+                    // socket.onmessage = function(event) {
+                    //     console.log("Received data:", event.data);
+                    //     Swal.update({
+                    //         title: `Scraping ${event.data} reviews`,
+                    //     })
+                    //     Swal.showLoading()
+                    // };
+
                 },
             })
+
             await fetch("http://127.0.0.1:4020/api/startScrapingSteamReview", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -127,9 +159,12 @@
                     )
             }).then(async (res)=>{
                 swal.close()
+                items = 0 
+                clearInterval(interval)
                 const data = await res.json()
                 reviewData = data
-                console.log(data);
+
+                // Success Toast 
                 Swal.mixin({
                     toast: true ,
                     position: 'bottom-end',
@@ -189,6 +224,9 @@
                         let reviewsTextField = document.createElement('td')
                         reviewsTextField.textContent = data[i].review
                         reviewsTextField.classList.add('px-2')
+                        // reviewsTextField.classList.add('overflow-x-hidden')
+                        // reviewsTextField.classList.add('w-96')
+                        // reviewsTextField.classList.add('line-clamp-3')
                         row.appendChild(reviewsTextField);
                         //voteField
                         let voteField = document.createElement('td')
