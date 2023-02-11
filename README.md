@@ -18,5 +18,5 @@ This project was done to study how to use puppeteer to scrape the data I need.
 - :link: [Example Link](https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent)
 
 - :warning: Problem
-  - When headless is false when scraping data, Chromium browser will be opened to simulate And while you are in the process of scraping that data and you close the browser it will cause an error and sometimes it won't.
+  - When you set headless to "false", puppeteer will open a simulated browser and while you are scraping data, Did you close your browser due to unexpected events? may cause an error which occurs very often But sometimes it doesn't happen.
   - When you export a csv file, the review field is not displayed and languages other than English are rendered incorrectly.
