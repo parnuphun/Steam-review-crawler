@@ -1,4 +1,4 @@
-# :page_facing_up: WebScraper
+## :page_facing_up: WebScraper
 This project was done to study how to use puppeteer to scrape the data I need.
 
 - install dependencies 
@@ -20,3 +20,5 @@ This project was done to study how to use puppeteer to scrape the data I need.
 - :warning: Problem
   - When you set headless to "false", puppeteer will open a simulated browser and while you are scraping data, Did you close your browser due to unexpected events? may cause an error which occurs very often But sometimes it doesn't happen.
   - When you export a csv file, the review field is not displayed and languages other than English are rendered incorrectly.
+
+## :camera: Instragram ...
