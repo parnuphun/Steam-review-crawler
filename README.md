@@ -1,11 +1,12 @@
 ## :page_facing_up: WebScraper
 This project was done to study how to use puppeteer to scrape the data I need. If you read and don't understand, yes I use Google Translate :trollface: .
 
+## :wrench: Configuration 
 - install dependencies 
 ```ruby
   npm install
 ```
-- start Project (you need to install additional nodemon in case your computer doesn't install nodemon globally on your computer.)
+- start Project 
 ```ruby
   npm run dev 
 ```
