@@ -21,6 +21,10 @@ This project was done to study how to use puppeteer to scrape the data I need. I
   npm run build
 ```
 
+```ruby
+  test
+```
+
 ## :zap: Steam Review
 - [Example Link](https://steamcommunity.com/app/730/reviews/?filterLanguage=all&p=1&browsefilter=mostrecent)
 - The maximum is 1000 reviews but you can change it later. To prevent cases where there are too many reviews.
