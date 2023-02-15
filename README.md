@@ -28,6 +28,5 @@ This project was done to study how to use puppeteer to scrape the data I need. I
 ### Instragram ...
 
 ## :pencil: Notes
-### Referece
 - [Infinite Scroll](https://www.youtube.com/watch?v=nDBdvqRWvCw&t=287s)
 - [Click Button](https://stackoverflow.com/questions/46342930/puppeteer-button-press) 
