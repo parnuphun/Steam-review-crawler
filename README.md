@@ -1,7 +1,6 @@
 ## :page_facing_up: WebScraper
 This project was done to study how to use puppeteer to scrape the data I need. If you read and don't understand, yes I use Google Translate :trollface: .
   - ✔️ [steam review](https://github.com/parnuphun/Scrape-everything-i-want#steam-review)
-  - 🚧 [instragram ...](https://github.com/parnuphun/Scrape-everything-i-want#instragram-)
 
 ## :package: Dependencies
 - [puppeteer](https://pptr.dev/)
@@ -27,7 +26,6 @@ This project was done to study how to use puppeteer to scrape the data I need. I
   - `div:nth-child(2)` The number 2 means the first item started.
   - Template Type `twoSmall` , `threeSmall` , `smallFallback` , `mediumFallback`  and `largeFallback`.
   - User Type `online` , `offline` and `in-game`.
-### Instragram ...
 
 ## :pencil: Notes
 - [Infinite Scroll](https://www.youtube.com/watch?v=nDBdvqRWvCw&t=287s)
