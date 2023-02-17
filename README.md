@@ -1,6 +1,5 @@
 ## :page_facing_up: WebScraper
 This project was done to study how to use puppeteer to scrape the data I need. If you read and don't understand, yes I use Google Translate :trollface: .
-  - ✔️ [steam review](https://github.com/parnuphun/Scrape-everything-i-want#steam-review)
 
 ## :package: Dependencies
 - [puppeteer](https://pptr.dev/)
